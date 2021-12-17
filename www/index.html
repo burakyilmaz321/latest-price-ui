@@ -23,11 +23,10 @@
     </header>
 
     <main>
-      <table class="table">
+      <table class="table" id="portfolio">
         <thead>
           <tr>
             <th scope="col">Kod</th>
-            <th scope="col">Açıklama</th>
             <th scope="col">Alış Tarihi</th>
             <th scope="col">Alış Fiyatı</th>
             <th scope="col">Güncel Fiyat</th>
@@ -35,6 +34,16 @@
             <th scope="col">%</th>
           </tr>
         </thead>
+        <tbody>
+          <tr id="benchmark">
+            <td scope="col">USD</td>
+            <td scope="col">2021-12-07</td>
+            <td scope="col"><div class="spinner-border spinner-border-sm" role="status"></div></td>
+            <td scope="col"><div class="spinner-border spinner-border-sm" role="status"></div></td>
+            <td scope="col"><div class="spinner-border spinner-border-sm" role="status"></div></td>
+            <td scope="col"><div class="spinner-border spinner-border-sm" role="status"></div></td>
+          </tr>
+        </tbody>
       </table>
     </main>
   </div>

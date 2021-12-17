@@ -2,7 +2,7 @@ import { getFonAtDate, getFonLatest, getUsdAtDate, getUsdLatest } from "./servic
 import { generateTable } from "./table.js";
 
 const calculatePerformance = (l, f) => {
-  return ((l - f) / f) * 100;
+  return Math.round(((l - f) / f) * 10000) / 100;
 };
 
 const calculateNumDays = (d) => {
@@ -17,8 +17,8 @@ const calculateNumDays = (d) => {
 const updateData = async (d) => {
   const fonLatest = await getFonLatest(d.fon).then(response => response.json());
   const fonAtDate = await getFonAtDate(d.fon, d.purchase_date).then(response => response.json());
-  d.price = fonLatest;
-  d.cost = fonAtDate;
+  d.price = Math.round(fonLatest * 100) / 100;
+  d.cost = Math.round(fonAtDate * 100) / 100;
   d.num_days = calculateNumDays(d.purchase_date);
   d.performance = calculatePerformance(fonLatest, fonAtDate);
   return d;
@@ -26,11 +26,11 @@ const updateData = async (d) => {
 
 
 const app = async () => {
-  let table = document.querySelector("table");
+  let portfolioTable = document.getElementById("portfolio");
+  let benchmarkTable = document.getElementById("benchmark");
   let data = [
     {
       fon: "YAC",
-      desc: "Bla Bla",
       purchase_date: "2021-12-07",
       cost: "",
       price: "",
@@ -39,7 +39,6 @@ const app = async () => {
     },
     {
       fon: "YTD",
-      desc: "Bla Bla",
       purchase_date: "2021-12-07",
       cost: "",
       price: "",
@@ -48,7 +47,6 @@ const app = async () => {
     },
     {
       fon: "YAY",
-      desc: "Bla Bla",
       purchase_date: "2021-12-07",
       cost: "",
       price: "",
@@ -57,7 +55,6 @@ const app = async () => {
     },
     {
       fon: "YJH",
-      desc: "Bla Bla",
       purchase_date: "2021-12-07",
       cost: "",
       price: "",
@@ -69,7 +66,14 @@ const app = async () => {
     element = await updateData(element)
   };
 
-  generateTable(table, data);
+  generateTable(portfolioTable, data);
+
+  const usdLatest = await getUsdLatest().then(response => response.json());
+  const usdAtDate = await getUsdAtDate("2021-12-07").then(response => response.json());
+  benchmarkTable.cells[2].innerText = Math.round(usdAtDate * 100) / 100;
+  benchmarkTable.cells[3].innerText = Math.round(usdLatest * 100) / 100;
+  benchmarkTable.cells[4].innerText = calculateNumDays("2021-12-07");
+  benchmarkTable.cells[5].innerText = calculatePerformance(usdLatest, usdAtDate);
 }
 
 // On Load
